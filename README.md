@@ -14,15 +14,16 @@ Aplicação para criação de cardápios eletrônicos para restaurantes.
 
 No console do MySQL:
 
-1. Criar o database: ```create database icardapio```
-2. Dar permissão para o usuário: ```grant all privileges on icardapio.* to icardapio@localhost identified by 'icardapio'```
-3. Flush: ```flush privileges```
+1. Criar o database: ```create database icardapio;```
+2. Dar permissão para o usuário: ```grant all privileges on icardapio.*
+   to icardapio@localhost identified by 'icardapio';```
+3. Flush: ```flush privileges;```
 
 
 ## Executando o projeto
 
 1. Clone (ou faça um fork e clone): ```git clone https://github.com/michetti/icardapio.git```
-2. De dentro do diretório do projeto: ```mvn tomcat:runt```
+2. De dentro do diretório do projeto: ```mvn tomcat:run```
 
 
 ## Eclipse / SpringSource STS
