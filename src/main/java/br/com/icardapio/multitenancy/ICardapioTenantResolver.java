@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import br.com.icardapio.entity.Restaurant;
 import br.com.icardapio.repositories.RestaurantsRepository;
 
 public class ICardapioTenantResolver implements CurrentTenantResolver<Long> {
@@ -16,7 +17,9 @@ public class ICardapioTenantResolver implements CurrentTenantResolver<Long> {
 	protected Long getCurrentTenantFromSubdomain() {
 		ServletRequestAttributes attr = (ServletRequestAttributes)RequestContextHolder.currentRequestAttributes();
 		String subdomain = attr.getRequest().getServerName().split("\\.")[0];
-		return restaurantsRepository.getBySubdomain(subdomain).getTenantId();
+		
+		Restaurant restaurant = restaurantsRepository.getBySubdomain(subdomain);
+		return restaurant != null ? restaurant.getTenantId() : 0;
 	}
 	
 	@Override

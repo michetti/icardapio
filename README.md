@@ -24,9 +24,11 @@ No console do MySQL:
 
 1. Clone (ou faça um fork e clone): ```git clone https://github.com/michetti/icardapio.git```
 2. De dentro do diretório do projeto: ```mvn tomcat:run```
-3. Crie alguns dados para o sistema: [http://localhost:8080/icardapio/createMasterData](http://localhost:8080/icardapio/createMasterData)
-4. Acesse em [http://localhost:8080/icardapio](http://localhost:8080/icardapio)
-5. Login: usuário: admin / senha: admin 
+3. Crie alguns dados para o sistema: [http://www.lvh.me:8080/icardapio/createMasterData](http:///www.lvh.me:8080/icardapio/createMasterData)
+4. Acesse em [http:///www.lvh.me:8080/icardapio](http:///www.lvh.me:8080/icardapio)
+5. Login: usuário: admin / senha: admin
+
+obs: o domínio lvh.me é direciona sempre para localhost, mesmo quando usando um subdomínio, de modo que não precisamos criar um entrada em /etc/hosts para cada subdomínio criado durante desenvolvimento.
 
 
 ## Eclipse / SpringSource STS
