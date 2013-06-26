@@ -85,7 +85,7 @@ public class RestaurantController {
 	 public Restaurant getRestaurantObject() {
 		 return new Restaurant();
 	 }	
-	
+
 	 @ModelAttribute("product")
 	 public Product getProductObject() {
 		 return new Product();

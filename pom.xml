@@ -79,7 +79,7 @@
 		   <artifactId>org.eclipse.persistence.jpa</artifactId>
 		   <version>${org.eclipse.persistence-version}</version>
 		   <scope>compile</scope>
-		</dependency>		
+		</dependency>
 		
 		<!-- Commons DBPC -->
 		<dependency>

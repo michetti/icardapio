@@ -38,11 +38,11 @@ public class RestaurantFacade {
 	
 	public List<Category> getAllCategories() {
 		List<Category> categories = categoriesRepository.findAll();
-		
+
 		for(Category category: categories) {
 			category.setProducts(productsRepository.findAllByCategory(category));
 		}
-		
+
 		return categories;
 	}
 
@@ -85,7 +85,6 @@ public class RestaurantFacade {
 				categoriesRepository.save(new Category(categoryName));
 			}
 		}
-		
 	}
 
 }

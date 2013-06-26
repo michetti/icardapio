@@ -56,4 +56,5 @@
 
 	<!-- JPA Repositories -->
     <jpa:repositories base-package="br.com.icardapio.repositories" factory-class="br.com.icardapio.multitenancy.MultiTenantJpaRepositoryFactoryBean"  />
+
 </beans>
