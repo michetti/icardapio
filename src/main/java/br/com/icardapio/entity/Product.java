@@ -3,18 +3,23 @@ package br.com.icardapio.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.eclipse.persistence.annotations.Multitenant;
+import org.eclipse.persistence.annotations.TenantDiscriminatorColumn;
+import org.eclipse.persistence.config.PersistenceUnitProperties;
 
 @Entity
-@NamedQuery(name="listAllProducts", query="select p from Product p")
+@Multitenant
+@TenantDiscriminatorColumn(name="TENANT_ID", discriminatorType=DiscriminatorType.INTEGER, contextProperty=PersistenceUnitProperties.MULTITENANT_PROPERTY_DEFAULT)
 public class Product implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -22,6 +27,9 @@ public class Product implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(name="TENANT_ID", insertable=false, updatable=false)
+	public Long tenantId;
 	
 	@ManyToOne
 	private Category category;
@@ -44,6 +52,10 @@ public class Product implements Serializable {
 		this.id = id;
 	}
 	
+	public Long getTenantId() {
+		return tenantId;
+	}
+
 	public Category getCategory() {
 		return this.category;
 	}
@@ -79,6 +91,7 @@ public class Product implements Serializable {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(5, 7)
+			.append(tenantId)
 			.append(category)
 			.append(name)
 			.toHashCode();
@@ -95,6 +108,7 @@ public class Product implements Serializable {
 		Product rhs = (Product) obj;
 		return new EqualsBuilder()
 			.appendSuper(super.equals(obj))
+			.append(tenantId, rhs.getTenantId())
 			.append(category, rhs.getCategory())
 			.append(name, rhs.getName())
 			.isEquals();		

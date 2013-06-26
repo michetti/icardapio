@@ -3,52 +3,44 @@ package br.com.icardapio.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.icardapio.dao.JpaCategoriesDao;
-import br.com.icardapio.dao.JpaProductsDao;
 import br.com.icardapio.entity.Category;
 import br.com.icardapio.entity.Product;
 import br.com.icardapio.entity.Restaurant;
+import br.com.icardapio.multitenancy.CurrentTenantResolver;
+import br.com.icardapio.repositories.CategoriesRepository;
+import br.com.icardapio.repositories.ProductsRepository;
+import br.com.icardapio.repositories.RestaurantsRepository;
 
 @Service
 @Transactional(propagation=Propagation.MANDATORY)
 public class RestaurantFacade {
 	
 	@Autowired
-	private ApplicationContext applicationContext;
+	private CurrentTenantResolver<Long> tenantResolver;
 	
 	@Autowired
-	private JpaCategoriesDao categoriesDao;
+	private RestaurantsRepository restaurantsRepository;
 	
 	@Autowired
-	private JpaProductsDao productsDao;
+	private CategoriesRepository categoriesRepository;
 	
+	@Autowired
+	private ProductsRepository productsRepository;
 	
 	public Restaurant getRestaurant() {
-		Restaurant restaurant = new Restaurant();
-		restaurant.setName("Dona Maria Pizzaria");
-		restaurant.setSlogan("A melhor pizza do Ipiranga");
-		restaurant.setPhone("11 3115-2345");
-		restaurant.setAddress("Av Dr Gentil de Moura, 850");
-		restaurant.setCity("São Paulo");
-		
-		return restaurant;
+		return restaurantsRepository.findOne(tenantResolver.getCurrentTenantId());
 	}
 	
 	public List<Category> getAllCategories() {
-		List<Category> categories = categoriesDao.listAll();
+		List<Category> categories = categoriesRepository.findAll();
 		
-		if (categories.isEmpty()) {
-			for(String categoryName: new String[] { "Pizza", "Massas", "Bebidas", "Sobremesas" }) {
-				categoriesDao.saveOrUpdate(new Category(categoryName));
-			}
-			
-			categories = categoriesDao.listAll();
+		for(Category category: categories) {
+			category.setProducts(productsRepository.findAllByCategory(category));
 		}
 		
 		return categories;
@@ -56,15 +48,41 @@ public class RestaurantFacade {
 
 	@PreAuthorize("hasRole('admin')")
 	public Product addProduct(Product product) {
-		return productsDao.saveOrUpdate(product);
+		return productsRepository.save(product);
 	}
 	
 	@PreAuthorize("hasRole('admin')")
 	public Product removeProduct(Long categoryId, Long productId) {
-		Category category = categoriesDao.find(categoryId);
-		Product product = productsDao.find(productId);
+		Category category = categoriesRepository.findOne(categoryId);
+		Product product = productsRepository.findOne(productId);
 		
-		return productsDao.remove(category, product);
+		category.getProducts().remove(product);
+		return product;
+	}
+	
+	@PreAuthorize("hasRole('admin')")
+	public void createTestData() {
+		
+		// create the master tenant
+		if (restaurantsRepository.getBySubdomain("www") == null) {
+			Restaurant restaurant = new Restaurant();
+			restaurant.setName("iCardapio");
+			restaurant.setSubdomain("www");
+			restaurant.setSlogan("Seu Cardapio na Internet");
+			restaurant.setPhone("11 3114-2334");
+			restaurant.setAddress("Av Dr Gentil de Moura, 850");
+			restaurant.setCity("Sao Paulo");
+			
+			restaurantsRepository.save(restaurant);
+		}
+		
+		// create some categories
+		if (categoriesRepository.count() <= 0) {
+			for(String categoryName: new String[] { "Pizza", "Massas", "Bebidas", "Sobremesas" }) {
+				categoriesRepository.save(new Category(categoryName));
+			}
+		}
+		
 	}
 
 }

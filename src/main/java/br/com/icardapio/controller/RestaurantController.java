@@ -60,5 +60,14 @@ public class RestaurantController {
 		redirectAttributes.addFlashAttribute("message", "Produto removido com sucesso");
 		return "redirect:/";		
 	}
+	
+	@PreAuthorize("hasRole('admin')")
+	@RequestMapping(value = "/createTestData", method = RequestMethod.GET)
+	public String createTestData(final RedirectAttributes redirectAttributes) {
+		facade.createTestData();
+		
+		redirectAttributes.addFlashAttribute("message", "Dados de teste criados com sucesso");
+		return "redirect:/";		
+	}
 
 }

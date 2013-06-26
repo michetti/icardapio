@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="icardapio" transaction-type="RESOURCE_LOCAL">
-		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		
+		<class>br.com.icardapio.entity.Restaurant</class>
 		<class>br.com.icardapio.entity.Category</class>
 		<class>br.com.icardapio.entity.Product</class>
+		<!-- <exclude-unlisted-classes /> -->
 	</persistence-unit>
 </persistence>

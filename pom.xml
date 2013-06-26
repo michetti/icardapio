@@ -73,7 +73,15 @@
 			<version>${org.springframework.data-version}</version>
 		</dependency>
 		
-		<!-- Hibernate -->
+		<!-- Eclipse Link -->
+		<dependency>
+		   <groupId>org.eclipse.persistence</groupId>
+		   <artifactId>org.eclipse.persistence.jpa</artifactId>
+		   <version>2.5.0</version>
+		   <scope>compile</scope>
+		</dependency>		
+		
+		<!-- Hibernate
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
@@ -84,7 +92,7 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${org.hibernate-version}</version>
-		</dependency>
+		</dependency> -->
 		
 		<!-- Commons DBPC -->
 		<dependency>
