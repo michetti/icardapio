@@ -33,7 +33,7 @@ public class MultiTenantSimpleJpaRepository<T, ID extends Serializable> extends 
     }
  
     protected void setCurrentTenant() {
-        em.setProperty(PersistenceUnitProperties.MULTITENANT_PROPERTY_DEFAULT, tenantResolver.getCurrentTenantId().intValue());
+        em.setProperty(PersistenceUnitProperties.MULTITENANT_PROPERTY_DEFAULT, tenantResolver.getCurrentTenantId());
     }
  
     @Override

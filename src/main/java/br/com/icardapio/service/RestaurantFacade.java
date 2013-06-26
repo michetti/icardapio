@@ -60,8 +60,11 @@ public class RestaurantFacade {
 		return product;
 	}
 	
-	@PreAuthorize("hasRole('admin')")
-	public void createTestData() {
+	public Restaurant addRestaurant(Restaurant restaurant) {
+		return restaurantsRepository.save(restaurant);
+	}
+	
+	public void createMasterData() {
 		
 		// create the master tenant
 		if (restaurantsRepository.getBySubdomain("www") == null) {

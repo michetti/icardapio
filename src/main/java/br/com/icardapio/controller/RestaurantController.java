@@ -1,7 +1,6 @@
 package br.com.icardapio.controller;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.com.icardapio.entity.Category;
 import br.com.icardapio.entity.Product;
 import br.com.icardapio.entity.Restaurant;
+import br.com.icardapio.multitenancy.CurrentTenantResolver;
 import br.com.icardapio.service.RestaurantFacade;
 
 @Controller
@@ -26,20 +26,26 @@ public class RestaurantController {
 	@Autowired
 	private RestaurantFacade facade;
 	
-	 @ModelAttribute("product")
-	 public Product getProductObject() {
-		 return new Product();
-	 }	
+	@Autowired
+	private CurrentTenantResolver<Long> tenantResolver;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String home(@ModelAttribute("tenant") Restaurant tenant, Model model) {
+		// add information about current tenant
 		Restaurant restaurant = facade.getRestaurant();
-		List<Category> categories = facade.getAllCategories();
-		
 		model.addAttribute("restaurant", restaurant);
-		model.addAttribute("categories", categories);
 		
-		return "home";
+		if (tenantResolver.isMasterTenant()) {
+			model.addAttribute("tenant", tenant);
+			
+			return "landing";
+			
+		} else {
+			List<Category> categories = facade.getAllCategories();
+			model.addAttribute("categories", categories);
+			
+			return "home";
+		}
 	}
 
 	@PreAuthorize("hasRole('admin')")
@@ -61,13 +67,32 @@ public class RestaurantController {
 		return "redirect:/";		
 	}
 	
-	@PreAuthorize("hasRole('admin')")
-	@RequestMapping(value = "/createTestData", method = RequestMethod.GET)
-	public String createTestData(final RedirectAttributes redirectAttributes) {
-		facade.createTestData();
+	@RequestMapping(value = "/addRestaurant", method = RequestMethod.POST)
+	public String addRestaurant(@ModelAttribute("tenant") Restaurant restaurant, Model model, final RedirectAttributes redirectAttributes) {
+		restaurant = facade.addRestaurant(restaurant);
+		return "redirect:" + getRestaurantFullUrl(restaurant);
+	}
+	
+	@RequestMapping(value = "/createMasterData", method = RequestMethod.GET)
+	public String createMasterData(final RedirectAttributes redirectAttributes) {
+		facade.createMasterData();
 		
 		redirectAttributes.addFlashAttribute("message", "Dados de teste criados com sucesso");
 		return "redirect:/";		
 	}
+	
+	 @ModelAttribute("tenant")
+	 public Restaurant getRestaurantObject() {
+		 return new Restaurant();
+	 }	
+	
+	 @ModelAttribute("product")
+	 public Product getProductObject() {
+		 return new Product();
+	 }
+	 
+	 protected String getRestaurantFullUrl(Restaurant restaurant) {
+		 return "http://" + restaurant.getSubdomain() + ".lvh.me:8080/icardapio";
+	 }
 
 }

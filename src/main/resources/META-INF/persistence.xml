@@ -6,6 +6,5 @@
 		<class>br.com.icardapio.entity.Restaurant</class>
 		<class>br.com.icardapio.entity.Category</class>
 		<class>br.com.icardapio.entity.Product</class>
-		<!-- <exclude-unlisted-classes /> -->
 	</persistence-unit>
 </persistence>

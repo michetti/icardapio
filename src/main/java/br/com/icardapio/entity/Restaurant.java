@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -43,6 +44,7 @@ public class Restaurant implements Serializable {
 		this.id = id;
 	}
 	
+	@Transient
 	public Long getTenantId() {
 		return this.id;
 	}
@@ -99,7 +101,6 @@ public class Restaurant implements Serializable {
 	public int hashCode() {
 		return new HashCodeBuilder(9, 11)
 			.append(name)
-			.append(tenantId)
 			.toHashCode();
 	}
 
@@ -115,7 +116,6 @@ public class Restaurant implements Serializable {
 		return new EqualsBuilder()
 			.appendSuper(super.equals(obj))
 			.append(name, rhs.getName())
-			.append(tenantId, rhs.getTenantId())
 			.isEquals();		
 	}	
 	
