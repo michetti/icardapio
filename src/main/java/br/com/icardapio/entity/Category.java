@@ -5,18 +5,15 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @Entity
-@NamedQuery(name="listAllCategories", query="select c from Category c")
 public class Category implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -27,7 +24,7 @@ public class Category implements Serializable {
 	
 	private String name;
 	
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval=true, mappedBy="category")
+	@OneToMany(cascade=CascadeType.ALL, orphanRemoval=true, mappedBy="category")
 	private List<Product> products;
 
 	public Category() {

@@ -26,11 +26,6 @@ public class RestaurantController {
 	@Autowired
 	private RestaurantFacade facade;
 	
-	 @ModelAttribute("product")
-	 public Product getProductObject() {
-		 return new Product();
-	 }	
-	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		Restaurant restaurant = facade.getRestaurant();
@@ -60,5 +55,18 @@ public class RestaurantController {
 		redirectAttributes.addFlashAttribute("message", "Produto removido com sucesso");
 		return "redirect:/";		
 	}
+	
+	@RequestMapping(value = "/createMasterData", method = RequestMethod.GET)
+	public String createMasterData(final RedirectAttributes redirectAttributes) {
+		facade.createMasterData();
+
+		redirectAttributes.addFlashAttribute("message", "Dados de teste criados com sucesso");
+		return "redirect:/";		
+	}	
+	
+	 @ModelAttribute("product")
+	 public Product getProductObject() {
+		 return new Product();
+	 }	
 
 }

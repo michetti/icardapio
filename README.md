@@ -24,7 +24,9 @@ No console do MySQL:
 
 1. Clone (ou faça um fork e clone): ```git clone https://github.com/michetti/icardapio.git```
 2. De dentro do diretório do projeto: ```mvn tomcat:run```
-3. Acesse em http://localhost:8080/icardapio
+3. Crie alguns dados para o sistema: [http://localhost:8080/icardapio/createMasterData](http://localhost:8080/icardapio/createMasterData)
+4. Acesse em [http://localhost:8080/icardapio](http://localhost:8080/icardapio)
+5. Login: usuário: admin / senha: admin 
 
 
 ## Eclipse / SpringSource STS

@@ -3,31 +3,26 @@ package br.com.icardapio.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import br.com.icardapio.dao.JpaCategoriesDao;
-import br.com.icardapio.dao.JpaProductsDao;
 import br.com.icardapio.entity.Category;
 import br.com.icardapio.entity.Product;
 import br.com.icardapio.entity.Restaurant;
+import br.com.icardapio.repositories.CategoriesRepository;
+import br.com.icardapio.repositories.ProductsRepository;
 
 @Service
 @Transactional(propagation=Propagation.MANDATORY)
 public class RestaurantFacade {
 	
 	@Autowired
-	private ApplicationContext applicationContext;
+	private CategoriesRepository categoriesRepository;
 	
 	@Autowired
-	private JpaCategoriesDao categoriesDao;
-	
-	@Autowired
-	private JpaProductsDao productsDao;
-	
+	private ProductsRepository productsRepository;
 	
 	public Restaurant getRestaurant() {
 		Restaurant restaurant = new Restaurant();
@@ -41,30 +36,37 @@ public class RestaurantFacade {
 	}
 	
 	public List<Category> getAllCategories() {
-		List<Category> categories = categoriesDao.listAll();
-		
-		if (categories.isEmpty()) {
-			for(String categoryName: new String[] { "Pizza", "Massas", "Bebidas", "Sobremesas" }) {
-				categoriesDao.saveOrUpdate(new Category(categoryName));
-			}
-			
-			categories = categoriesDao.listAll();
+		List<Category> categories = categoriesRepository.findAll();
+
+		for(Category category: categories) {
+			category.setProducts(productsRepository.findAllByCategory(category));
 		}
-		
+
 		return categories;
 	}
 
 	@PreAuthorize("hasRole('admin')")
 	public Product addProduct(Product product) {
-		return productsDao.saveOrUpdate(product);
+		return productsRepository.save(product);
 	}
 	
 	@PreAuthorize("hasRole('admin')")
 	public Product removeProduct(Long categoryId, Long productId) {
-		Category category = categoriesDao.find(categoryId);
-		Product product = productsDao.find(productId);
-		
-		return productsDao.remove(category, product);
+		Category category = categoriesRepository.findOne(categoryId);
+		Product product = productsRepository.findOne(productId);
+
+		category.getProducts().remove(product);
+		return product;
 	}
+	
+	public void createMasterData() {
+		// create some categories
+		if (categoriesRepository.count() <= 0) {
+			for(String categoryName: new String[] { "Pizza", "Massas", "Bebidas", "Sobremesas" }) {
+				categoriesRepository.save(new Category(categoryName));
+			}
+		}
+
+	}	
 
 }
