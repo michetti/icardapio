@@ -21,7 +21,7 @@ public class MultiTenantJpaRepositoryFactoryBean<T extends Repository<S, ID>, S,
 
 	@Override
 	public void afterPropertiesSet() {
-		Assert.notNull(currentTenantResolver, "CurrentTenantResolver must not be null!");
+		Assert.notNull(currentTenantResolver, "CurrentTenantResolver nao pode ser nulo!");
 		super.afterPropertiesSet();
 	}
 

@@ -10,12 +10,12 @@
 		</layout>
 	</appender>
 	
-	<!-- Application Loggers -->
+	<!-- Loggers da aplicacao -->
 	<logger name="br.com.icardaio">
 		<level value="info" />
 	</logger>
 	
-	<!-- 3rdparty Loggers -->
+	<!-- Loggers de terceiros -->
 	<logger name="org.springframework.core">
 		<level value="info" />
 	</logger>
@@ -32,7 +32,7 @@
 		<level value="info" />
 	</logger>
 
-	<!-- Root Logger -->
+	<!-- Logger Root -->
 	<root>
 		<priority value="warn" />
 		<appender-ref ref="console" />

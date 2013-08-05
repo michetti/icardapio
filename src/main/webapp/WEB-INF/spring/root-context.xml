@@ -9,12 +9,12 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 		
-	<!-- Load application.property files -->
+	<!-- Carrega o arquivo application.properties -->
 	<context:property-placeholder location="classpath:application.properties" />
 	
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />		
 
-	<!-- Create a datasource using dbcp -->	
+	<!-- Create o datasource da aplicacao -->	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 	    <property name="driverClassName" value="${dataSource.driverClassName}" />
 	    <property name="url" value="${dataSource.url}" />
@@ -22,7 +22,7 @@
 	    <property name="password" value="${dataSource.password}" />
 	</bean>	
 	
-	<!-- Create a jpa vendor adapter for eclipse link -->
+	<!-- Configura o EclipseLink como Vendor JPA -->
 	<bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
 		<property name="showSql" value="${jpaVendorAdapter.showSql}" />
 		<property name="generateDdl" value="${jpaVendorAdapter.generateDdl}" />
@@ -30,31 +30,30 @@
 		<property name="databasePlatform" value="${jpaVendorAdapter.databasePlatform}" />
 	</bean>	
 	
-	<!-- Create the entity manager factory -->
-    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
-        <property name="persistenceUnitName" value="icardapio" />
-        <property name="jpaDialect">
-			<bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect" />        
-        </property>
-        <property name="jpaPropertyMap">
-        	<props>
-	            <prop key="eclipselink.weaving">false</prop>
-				<prop key="eclipselink.multitenant.tenants-share-cache">true</prop>	            
-        	</props>
-        </property> 		
-    </bean>
-    
-    <!-- Transaction Manager -->
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
-    </bean>
-    
-    <!-- Tenant Resolver -->
-    <bean id="tenantResolver" class="br.com.icardapio.multitenancy.ICardapioTenantResolver" />
+	<!-- Cria o a factory dos entity managers -->
+  <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+      <property name="dataSource" ref="dataSource" />
+      <property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+      <property name="persistenceUnitName" value="icardapio" />
+      <property name="jpaDialect">
+		<bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect" />        
+      </property>
+      <property name="jpaPropertyMap">
+      	<props>
+	          <prop key="eclipselink.weaving">false</prop>
+			<prop key="eclipselink.multitenant.tenants-share-cache">true</prop>	            
+      	</props>
+      </property> 		
+  </bean>
+  
+  <!-- Gerenciador de Transacoes -->
+  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+      <property name="entityManagerFactory" ref="entityManagerFactory" />
+  </bean>
+  
+  <!-- Tenant Resolver -->
+  <bean id="tenantResolver" class="br.com.icardapio.multitenancy.ICardapioTenantResolver" />
 
-	<!-- JPA Repositories -->
-    <jpa:repositories base-package="br.com.icardapio.repositories" factory-class="br.com.icardapio.multitenancy.MultiTenantJpaRepositoryFactoryBean"  />
-
+  <!--  Repositorios JPA -->
+  <jpa:repositories base-package="br.com.icardapio.repositories" factory-class="br.com.icardapio.multitenancy.MultiTenantJpaRepositoryFactoryBean"  />
 </beans>
