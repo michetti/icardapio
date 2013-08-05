@@ -11,13 +11,13 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<!-- Enables the Spring MVC @Controller programming model -->
+  <!-- Ativa o uso de annotations -->
 	<annotation-driven />
 
-	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<!-- Serve arquivos em no diretorio ${webappRoot}/resources -->
 	<resources mapping="/resources/**" location="/resources/" />
 
-	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<!-- Local das views da aplicacao -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
@@ -38,7 +38,7 @@
 		</sec:authentication-provider>
 	</sec:authentication-manager>
     
-	<!-- Transactions -->
+	<!-- Transacoes -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
     
 </beans:beans>

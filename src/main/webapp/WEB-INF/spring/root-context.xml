@@ -9,12 +9,12 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 		
-	<!-- Load application.property files -->
+	<!-- Carrega o arqivo application.properties -->
 	<context:property-placeholder location="classpath:application.properties" />
 	
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />		
 	
-	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- Datasource usado pela aplicacao -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 	    <property name="driverClassName" value="${dataSource.driverClassName}" />
 	    <property name="url" value="${dataSource.url}" />
@@ -22,7 +22,7 @@
 	    <property name="password" value="${dataSource.password}" />
 	</bean>	
 	
-	<!-- Create a jpa vendor adapter for eclipse link -->
+	<!-- Configura o EclipseLink como adapter JPA -->
 	<bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
 		<property name="showSql" value="${jpaVendorAdapter.showSql}" />
 		<property name="generateDdl" value="${jpaVendorAdapter.generateDdl}" />
@@ -45,11 +45,11 @@
 		</property>        
 	</bean>
 	
-	<!-- Transaction Manager -->
+	<!-- Gerenciador de Transacoes -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
-	<!-- JPA Repositories -->
-    <jpa:repositories base-package="br.com.icardapio.repositories"  />
+	<!-- Repositories JPA -->
+  <jpa:repositories base-package="br.com.icardapio.repositories" />
 </beans>

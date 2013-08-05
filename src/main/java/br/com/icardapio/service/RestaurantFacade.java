@@ -60,7 +60,6 @@ public class RestaurantFacade {
 	}
 	
 	public void createMasterData() {
-		// create some categories
 		if (categoriesRepository.count() <= 0) {
 			for(String categoryName: new String[] { "Pizza", "Massas", "Bebidas", "Sobremesas" }) {
 				categoriesRepository.save(new Category(categoryName));
